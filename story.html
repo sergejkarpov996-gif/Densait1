@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Наша история ♥</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #fdf6ee;
+    --blush: #f2c4c4;
+    --rose: #c0616a;
+    --wine: #7b2d3e;
+    --gold: #c9a86c;
+    --dark: #1a0a10;
+    --muted: #8a6a70;
+    --bg2: #1a0a10;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg2);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor { width: 10px; height: 10px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform .1s; }
+  .cursor-ring { width: 34px; height: 34px; border: 1.5px solid var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: transform .18s; opacity: 0.5; }
+
+  /* Noise texture overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.35;
+  }
+
+  /* Stars */
+  .stars-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .star { position: absolute; border-radius: 50%; background: var(--gold); opacity: 0; animation: twinkle var(--dur) ease-in-out infinite var(--delay); }
+  @keyframes twinkle { 0%,100%{opacity:0;transform:scale(.5)} 50%{opacity:.4;transform:scale(1.2)} }
+
+  /* ===== HEADER ===== */
+  .site-header {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 48px;
+    border-bottom: 1px solid rgba(201,168,108,0.15);
+  }
+
+  .logo {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.8rem;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .back-link {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(253,246,238,0.5);
+    text-decoration: none;
+    transition: color 0.3s;
+    cursor: none;
+  }
+  .back-link:hover { color: var(--gold); }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 120px 20px 80px;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(201,168,108,0.12) 0%, transparent 70%);
+  }
+
+  .hero-eyebrow {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 20px;
+    opacity: 0.85;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 9vw, 7rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    animation: fadeUp 1s ease 0.4s both;
+  }
+  .hero-title .line1 { color: var(--cream); display: block; }
+  .hero-title .line2 { color: var(--gold); font-style: italic; display: block; }
+
+  .hero-divider {
+    width: 80px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 36px auto;
+    animation: fadeUp 1s ease 0.6s both;
+  }
+
+  .hero-sub {
+    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    font-weight: 300;
+    color: rgba(253,246,238,0.6);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.8;
+    animation: fadeUp 1s ease 0.8s both;
+  }
+
+  .scroll-hint {
+    margin-top: 60px;
+    animation: fadeUp 1s ease 1s both, bounce 2s ease 2s infinite;
+    font-size: 1.5rem;
+    opacity: 0.4;
+  }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ===== COUNTER BAR ===== */
+  .counter-bar {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 40px 0 0;
+    border-top: 1px solid rgba(201,168,108,0.15);
+    border-bottom: 1px solid rgba(201,168,108,0.15);
+  }
+
+  .counter-item {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+    padding: 40px 20px;
+    border-right: 1px solid rgba(201,168,108,0.15);
+    position: relative;
+  }
+  .counter-item:last-child { border-right: none; }
+
+  .counter-num {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+  }
+  .counter-label {
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(253,246,238,0.4);
+    margin-top: 8px;
+    display: block;
+  }
+
+  /* ===== TIMELINE ===== */
+  .timeline-section {
+    position: relative;
+    z-index: 2;
+    padding: 120px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .tl-heading {
+    text-align: center;
+    margin-bottom: 96px;
+  }
+  .tl-heading h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--cream);
+    font-weight: 700;
+  }
+  .tl-heading h2 em { color: var(--gold); font-style: italic; }
+  .tl-heading p { margin-top: 14px; color: rgba(253,246,238,0.5); font-size: 1.05rem; font-weight: 300; }
+
+  /* Central line */
+  .timeline {
+    position: relative;
+    padding: 0;
+    list-style: none;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, var(--gold), var(--rose), var(--gold), transparent);
+    transform: translateX(-50%);
+  }
+
+  .tl-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    margin-bottom: 72px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .tl-item.visible { opacity: 1; transform: translateY(0); }
+
+  /* alternate sides */
+  .tl-item:nth-child(odd) { flex-direction: row; }
+  .tl-item:nth-child(even) { flex-direction: row-reverse; }
+
+  .tl-content {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,108,0.18);
+    border-radius: 4px;
+    padding: 32px 28px;
+    position: relative;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .tl-content:hover {
+    border-color: rgba(201,168,108,0.45);
+    background: rgba(255,255,255,0.07);
+  }
+
+  /* Arrow */
+  .tl-item:nth-child(odd) .tl-content::after {
+    content: '';
+    position: absolute;
+    right: -9px; top: 28px;
+    border: 8px solid transparent;
+    border-left-color: rgba(201,168,108,0.18);
+  }
+  .tl-item:nth-child(even) .tl-content::after {
+    content: '';
+    position: absolute;
+    left: -9px; top: 28px;
+    border: 8px solid transparent;
+    border-right-color: rgba(201,168,108,0.18);
+  }
+
+  .tl-spacer { width: 60px; flex-shrink: 0; position: relative; display: flex; align-items: flex-start; justify-content: center; padding-top: 24px; }
+
+  .tl-dot {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--dark);
+    border: 2px solid var(--gold);
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .tl-item:hover .tl-dot { background: var(--gold); transform: scale(1.25); }
+
+  .tl-icon {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .tl-date {
+    font-family: 'Dancing Script', cursive;
+    font-size: 0.95rem;
+    color: var(--gold);
+    opacity: 0.8;
+    margin-bottom: 8px;
+    display: block;
+    letter-spacing: 0.05em;
+  }
+
+  .tl-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.45rem;
+    color: var(--cream);
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .tl-content p {
+    font-size: 1.0rem;
+    font-weight: 300;
+    color: rgba(253,246,238,0.6);
+    line-height: 1.8;
+  }
+
+  .tl-tag {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: rgba(201,168,108,0.12);
+    color: var(--gold);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(201,168,108,0.25);
+  }
+
+  /* ===== VOWS ===== */
+  .vows-section {
+    position: relative;
+    z-index: 2;
+    padding: 100px 20px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(192,97,106,0.08), rgba(201,168,108,0.05));
+    border-top: 1px solid rgba(201,168,108,0.12);
+    border-bottom: 1px solid rgba(201,168,108,0.12);
+  }
+
+  .vows-label {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.2rem;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .vows-list {
+    list-style: none;
+    max-width: 620px;
+    margin: 0 auto;
+  }
+  .vows-list li {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-style: italic;
+    color: var(--cream);
+    padding: 22px 0;
+    border-bottom: 1px solid rgba(201,168,108,0.12);
+    position: relative;
+    opacity: 0;
+    transform: translateX(-16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .vows-list li.visible { opacity: 1; transform: translateX(0); }
+  .vows-list li::before {
+    content: '✦';
+    color: var(--gold);
+    margin-right: 14px;
+    font-style: normal;
+    font-size: 0.8em;
+  }
+
+  .vows-sign {
+    margin-top: 48px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    color: var(--gold);
+  }
+
+  /* ===== MEMORY COUNTER ===== */
+  .memory-section {
+    position: relative;
+    z-index: 2;
+    padding: 100px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .memory-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--cream);
+    margin-bottom: 16px;
+  }
+  .memory-section h2 em { color: var(--gold); font-style: italic; }
+  .memory-section p {
+    font-size: 1.05rem; font-weight: 300; color: rgba(253,246,238,0.5);
+    margin-bottom: 48px; line-height: 1.7;
+  }
+
+  .live-counter {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,108,0.2);
+    border-radius: 4px;
+    padding: 48px 32px;
+    backdrop-filter: blur(8px);
+  }
+
+  .live-counter-time {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1;
+  }
+
+  .live-counter-label {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(253,246,238,0.35);
+  }
+
+  .live-units {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .live-unit {
+    text-align: center;
+    min-width: 80px;
+    padding: 16px;
+    border: 1px solid rgba(201,168,108,0.15);
+    border-radius: 4px;
+  }
+  .live-unit-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--cream);
+    display: block;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .live-unit-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    opacity: 0.6;
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer-final {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 100px 20px;
+    border-top: 1px solid rgba(201,168,108,0.12);
+  }
+
+  .footer-final h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    color: var(--cream);
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.1;
+  }
+  .footer-final h2 em { color: var(--gold); font-style: italic; }
+  .footer-final p {
+    font-size: 1.1rem; font-weight: 300; color: rgba(253,246,238,0.5);
+    max-width: 440px; margin: 0 auto 40px; line-height: 1.8;
+  }
+
+  .btn {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 36px;
+    border-radius: 2px;
+    cursor: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+    background: var(--gold);
+    color: var(--dark);
+    border: 1.5px solid var(--gold);
+    font-weight: 600;
+  }
+  .btn:hover {
+    background: transparent;
+    color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(201,168,108,0.3);
+  }
+
+  .footer-sign {
+    margin-top: 60px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.1rem;
+    color: rgba(253,246,238,0.25);
+  }
+
+  /* Responsive */
+  @media (max-width: 680px) {
+    .timeline::before { left: 20px; }
+    .tl-item, .tl-item:nth-child(even) { flex-direction: column; gap: 16px; padding-left: 48px; }
+    .tl-spacer { position: absolute; left: 0; top: 20px; padding-top: 0; }
+    .tl-item:nth-child(odd) .tl-content::after,
+    .tl-item:nth-child(even) .tl-content::after { display: none; }
+    .site-header { padding: 20px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="stars-bg" id="starsBg"></div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a href="index.html" class="logo">♥ нам</a>
+  <a href="index.html" class="back-link">← Вернуться</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">С самого начала и навсегда</p>
+  <h1 class="hero-title">
+    <span class="line1">Наша</span>
+    <span class="line2">История</span>
+  </h1>
+  <div class="hero-divider"></div>
+  <p class="hero-sub">
+    Каждая история начинается с одного момента. Этот сайт — моя попытка сохранить наши навсегда.
+  </p>
+  <div class="scroll-hint">↓</div>
+</section>
+
+<!-- COUNTER BAR -->
+<div class="counter-bar">
+  <div class="counter-item">
+    <span class="counter-num" id="cnt-days">—</span>
+    <span class="counter-label">Дней вместе</span>
+  </div>
+  <div class="counter-item">
+    <span class="counter-num">∞</span>
+    <span class="counter-label">Объятий</span>
+  </div>
+  <div class="counter-item">
+    <span class="counter-num">1</span>
+    <span class="counter-label">Любовь на двоих</span>
+  </div>
+  <div class="counter-item">
+    <span class="counter-num">♾️</span>
+    <span class="counter-label">Будущих воспоминаний</span>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <div class="tl-heading">
+    <h2>Как всё <em>начиналось</em></h2>
+    <p>Путь, который мы прошли вместе — шаг за шагом</p>
+  </div>
+
+  <ul class="timeline">
+
+    <li class="tl-item">
+      <div class="tl-content">
+        <span class="tl-icon">👀</span>
+        <span class="tl-date">Самое начало</span>
+        <h3>Первый взгляд</h3>
+        <p>
+          Я увидел тебя и что-то внутри меня изменилось. Не знаю, как объяснить это словами — просто знал, что ты особенная. Долго собирался с духом, чтобы заговорить.
+        </p>
+        <span class="tl-tag">Начало всего</span>
+      </div>
+      <div class="tl-spacer"><div class="tl-dot"></div></div>
+      <div style="flex:1"></div>
+    </li>
+
+    <li class="tl-item">
+      <div style="flex:1"></div>
+      <div class="tl-spacer"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <span class="tl-icon">💬</span>
+        <span class="tl-date">Первые слова</span>
+        <h3>Мы заговорили</h3>
+        <p>
+          Первый разговор — и я уже не хотел его заканчивать. Твой смех, твои мысли, твои глаза — я хотел узнавать тебя снова и снова.
+        </p>
+        <span class="tl-tag">Знакомство</span>
+      </div>
+    </li>
+
+    <li class="tl-item">
+      <div class="tl-content">
+        <span class="tl-icon">🌆</span>
+        <span class="tl-date">Первое свидание</span>
+        <h3>Мы встретились</h3>
+        <p>
+          Я волновался больше, чем хотел признать. Ты пришла, улыбнулась — и всё волнение исчезло. Тот вечер был идеальным. Не потому что всё шло по плану, а потому что ты была рядом.
+        </p>
+        <span class="tl-tag">Первое свидание</span>
+      </div>
+      <div class="tl-spacer"><div class="tl-dot"></div></div>
+      <div style="flex:1"></div>
+    </li>
+
+    <li class="tl-item">
+      <div style="flex:1"></div>
+      <div class="tl-spacer"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <span class="tl-icon">❤️</span>
+        <span class="tl-date">Важный момент</span>
+        <h3>Я понял, что влюблён</h3>
+        <p>
+          Это было в обычный день, ничего особенного. Ты что-то делала, смеялась над чем-то — и вдруг всё стало ясно. Я влюблён. Сильно, по-настоящему.
+        </p>
+        <span class="tl-tag">Осознание</span>
+      </div>
+    </li>
+
+    <li class="tl-item">
+      <div class="tl-content">
+        <span class="tl-icon">🌹</span>
+        <span class="tl-date">Признание</span>
+        <h3>Я сказал тебе</h3>
+        <p>
+          Сердце колотилось так, что я боялся, ты услышишь его. Три слова — и мир перевернулся. Ты ответила — и я почувствовал себя самым счастливым человеком на земле.
+        </p>
+        <span class="tl-tag">Признание в любви</span>
+      </div>
+      <div class="tl-spacer"><div class="tl-dot"></div></div>
+      <div style="flex:1"></div>
+    </li>
+
+    <li class="tl-item">
+      <div style="flex:1"></div>
+      <div class="tl-spacer"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <span class="tl-icon">🏠</span>
+        <span class="tl-date">Наши будни</span>
+        <h3>Просто быть рядом</h3>
+        <p>
+          Мы начали создавать наши маленькие традиции. Утренний кофе, вечерние прогулки, фильмы под пледом. Именно в этих мелочах я понял, что значит настоящий дом.
+        </p>
+        <span class="tl-tag">Наша жизнь</span>
+      </div>
+    </li>
+
+    <li class="tl-item">
+      <div class="tl-content">
+        <span class="tl-icon">🌟</span>
+        <span class="tl-date">Сегодня</span>
+        <h3>И всё только начинается</h3>
+        <p>
+          Я смотрю на тебя и понимаю: всё, что было до — только пролог. Лучшие главы нашей истории ещё впереди. И я хочу прожить каждую из них рядом с тобой.
+        </p>
+        <span class="tl-tag">Настоящее</span>
+      </div>
+      <div class="tl-spacer"><div class="tl-dot"></div></div>
+      <div style="flex:1"></div>
+    </li>
+
+  </ul>
+</section>
+
+<!-- VOWS -->
+<section class="vows-section">
+  <p class="vows-label">Мои обещания тебе ♥</p>
+  <ul class="vows-list">
+    <li>Всегда быть рядом, когда тебе тяжело</li>
+    <li>Слушать тебя — не только слышать, но и понимать</li>
+    <li>Делать тебя счастливой каждый день</li>
+    <li>Никогда не забывать, как мне повезло</li>
+    <li>Расти и меняться вместе с тобой</li>
+    <li>Любить тебя такой, какая ты есть</li>
+  </ul>
+  <div class="vows-sign">Навсегда твой ♥</div>
+</section>
+
+<!-- LIVE COUNTER -->
+<section class="memory-section">
+  <h2>Мы вместе уже <em>столько времени</em></h2>
+  <p>И каждая секунда — бесценна</p>
+
+  <div class="live-counter">
+    <div class="live-counter-time" id="liveTime">—</div>
+    <div class="live-counter-label">Прошло с начала нашей истории</div>
+    <div class="live-units">
+      <div class="live-unit"><span class="live-unit-num" id="lu-y">—</span><span class="live-unit-label">Лет</span></div>
+      <div class="live-unit"><span class="live-unit-num" id="lu-mo">—</span><span class="live-unit-label">Мес.</span></div>
+      <div class="live-unit"><span class="live-unit-num" id="lu-d">—</span><span class="live-unit-label">Дней</span></div>
+      <div class="live-unit"><span class="live-unit-num" id="lu-h">—</span><span class="live-unit-label">Часов</span></div>
+      <div class="live-unit"><span class="live-unit-num" id="lu-m">—</span><span class="live-unit-label">Минут</span></div>
+      <div class="live-unit"><span class="live-unit-num" id="lu-s">—</span><span class="live-unit-label">Секунд</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="footer-final">
+  <h2>Продолжение <em>следует…</em></h2>
+  <p>Это только начало нашей истории. Лучшие страницы ещё не написаны.</p>
+  <a href="index.html" class="btn">← Вернуться на главную</a>
+  <p class="footer-sign">Сделано с ❤️ специально для тебя · 2026</p>
+</section>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  function animCursor(){
+    cursor.style.left=mx+'px';cursor.style.top=my+'px';
+    rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+    ring.style.left=rx+'px';ring.style.top=ry+'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  // Stars
+  const sb=document.getElementById('starsBg');
+  for(let i=0;i<80;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*2+1;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*5}s;--delay:${Math.random()*6}s`;
+    sb.appendChild(s);
+  }
+
+  // ===== DATE SETUP — измени дату начала отношений! =====
+  // Формат: год, месяц-1 (0=январь), день
+  const START = new Date(2023, 5, 15); // 15 июня 2023 — ПРИМЕР
+
+  // Days counter in hero bar
+  const diffMs = Date.now() - START.getTime();
+  const diffDays = Math.floor(diffMs / 86400000);
+  document.getElementById('cnt-days').textContent = diffDays;
+
+  // Live counter
+  function updateLive(){
+    const now = new Date();
+    const diff = now - START;
+    if(diff < 0){ document.getElementById('liveTime').textContent='Скоро ♥'; return; }
+
+    let y = now.getFullYear() - START.getFullYear();
+    let mo = now.getMonth() - START.getMonth();
+    let d = now.getDate() - START.getDate();
+    if(d < 0){ mo--; d += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+    if(mo < 0){ y--; mo += 12; }
+
+    const totalSec = Math.floor(diff/1000);
+    const s = totalSec%60;
+    const totalMin = Math.floor(totalSec/60);
+    const m = totalMin%60;
+    const h = Math.floor(totalMin/60)%24;
+
+    document.getElementById('lu-y').textContent=y;
+    document.getElementById('lu-mo').textContent=mo;
+    document.getElementById('lu-d').textContent=d;
+    document.getElementById('lu-h').textContent=String(h).padStart(2,'0');
+    document.getElementById('lu-m').textContent=String(m).padStart(2,'0');
+    document.getElementById('lu-s').textContent=String(s).padStart(2,'0');
+    document.getElementById('liveTime').textContent=`${y} г. ${mo} мес. ${d} дн.`;
+  }
+  updateLive();
+  setInterval(updateLive,1000);
+
+  // Timeline reveal
+  const tlItems = document.querySelectorAll('.tl-item');
+  const tlObs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){e.target.classList.add('visible');tlObs.unobserve(e.target);}
+    });
+  },{threshold:0.15});
+  tlItems.forEach(i=>tlObs.observe(i));
+
+  // Vows reveal
+  const vows = document.querySelectorAll('.vows-list li');
+  const vowsObs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        vows.forEach((v,i)=>{setTimeout(()=>v.classList.add('visible'),i*120);});
+        vowsObs.disconnect();
+      }
+    });
+  },{threshold:0.2});
+  if(vows.length) vowsObs.observe(vows[0].parentElement);
+</script>
+</body>
+</html>
